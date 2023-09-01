@@ -5,8 +5,14 @@ const searchBtn = document.querySelector(".search button")
 const weatherIcon = document.querySelector(".weather-icon")
 
 async function checkweather(city) {
-    const response = await fetch(apiUrl + city + `&appid=${apiKey}`)
+    let response
+    try{
+         response = await fetch(apiUrl + city + `&appid=${apiKey}`)
+    }catch(error){
+        console.log("error")
+    }
 
+    
     if (response.status == 404) {
         document.querySelector(".error").style.display = "block"
         document.querySelector(".city").innerHTML = ""
@@ -15,32 +21,43 @@ async function checkweather(city) {
         document.querySelector(".wind").innerHTML = ""
     } else {
         document.querySelector(".error").style.display = "none"
-        var data = await response.json();
+    }
+    var data = await response.json();
        
 
+    try{
         document.querySelector(".city").innerHTML = data.name
-        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C"
-        document.querySelector(".humidity").innerHTML = data.main.humidity + "%"
-        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h"
+    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C"
+    document.querySelector(".humidity").innerHTML = data.main.humidity + "%"
+    document.querySelector(".wind").innerHTML = data.wind.speed + " km/h"
+    }catch(error){
+        console.log("error")
+    }
 
+    try{
         if (data.weather[0].main == "Clouds") {
             weatherIcon.src = "img/clouds.png"
         }
-        if (data.weather[0].main == "Clear") {
+        else if (data.weather[0].main == "Clear") {
             weatherIcon.src = "img/clear.png"
         }
-        if (data.weather[0].main == "Rain") {
+        else if (data.weather[0].main == "Rain") {
             weatherIcon.src = "img/rain.png"
         }
-        if (data.weather[0].main == "Drizzle") {
+        else if (data.weather[0].main == "Drizzle") {
             weatherIcon.src = "img/drizzle.png"
         }
-        if (data.weather[0].main == "Mist") {
+        else if (data.weather[0].main == "Mist") {
             weatherIcon.src = "img/mist.png"
         }
-        if (data.weather[0].main == "Snow") {
+        else if (data.weather[0].main == "Snow") {
             weatherIcon.src = "img/snow.png"
         }
+        else if (data.weather[0].main == "Smoke") {
+            weatherIcon.src = "img/mist.png"
+        }
+    }catch(error){
+        console.log("error")
     }
 
 }
